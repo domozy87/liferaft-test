@@ -12,36 +12,56 @@ import {
   StepLabel,
   Stepper
 } from "@material-ui/core";
-import { Formik, Field, Form, FormikConfig, FormikValues } from "formik";
+import { Formik, Form, FormikConfig, FormikValues } from "formik";
 import * as Yup from "yup";
+
+// Material UI Controls
+import TextField from "@mui/material/TextField";
+import { SelectChangeEvent, Button as MUIButton } from "@mui/material";
 
 // Components
 import Country from "./Country";
 import State from "./State";
 import Province from "./Province";
+import Color from "./Color";
+import Thumb from "./Thumb";
 
 // Types or Enum
 import { ColorFoodVariant } from "../types/colorFood";
 
-// const Wrapper = styled.div`
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-//   flex-direction: column;
-// `;
-
-// const StyleForm = styled(Form)`
-//   display: flex;
-//   align-items: flex-start;
-//   justify-content: flex-start;
-//   flex-direction: column;
-// `;
-
-const ImagePreview = styled.img`
-  width: 200px;
+const StyleFormikStepContent = styled.div`
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-direction: column;
+  max-width: var(--maxWidth);
+  padding: 20px 20px;
+  margin: 0 auto;
 `;
 
-const StepOneSchema = Yup.object({
+const StyleBox = styled(Box)`
+  padding: 12px;
+  min-width: 300px;
+`;
+
+const StyleGrid = styled(Grid)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 20px;
+`;
+
+const StyleMessage = styled.span`
+  font-size: 16px;
+  font-weight: 500;
+`;
+
+const StyleInputFile = styled.input`
+    height: 20px;
+    min-width: 300px;
+`;
+
+const StepOneSchema = Yup.object().shape({
   name: Yup.string()
     .min(2, "Too Short!")
     .max(50, "Too Long!")
@@ -49,7 +69,7 @@ const StepOneSchema = Yup.object({
   email: Yup.string()
     .email("Invalid email")
     .required("Email is required"),
-  //   country: Yup.string().required("Country is required"),
+  country: Yup.string().required("Country is required"),
   color: Yup.string().required("Color is required")
 });
 
@@ -108,143 +128,139 @@ const Home: React.FC = () => {
           }}
         >
           <FormikStep label="Step 1">
-            <Box>
-              <label htmlFor="name">Name:</label>
-              <Field
-                id="name"
-                name="name"
-                label="Name"
-                placeholder="Enter your name"
-              />
-            </Box>
-            <Box>
-              <label htmlFor="email">Email:</label>
-              <Field
-                id="email"
-                name="email"
-                type="email"
-                placeholder="Enter your email"
-              />
-            </Box>
-
-            <Box>
-              <label htmlFor="country">Country:</label>
-              <Field
-                as="select"
-                id="country"
-                name="country"
-                value={country}
-                onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-                  setCountry(e.target.value)
-                }
-              >
-                <Country />
-              </Field>
-            </Box>
-
-            {isUSA && (
-              <Box>
-                <label htmlFor="state">USA State:</label>
-                <Field as="select" name="state" label="US State">
-                  <State />
-                </Field>
-              </Box>
-            )}
-
-            {isCanada && (
-              <Box>
-                <label htmlFor="province">Canada Province:</label>
-                <Field as="select" name="province" label="Canada Province">
-                  <Province />
-                </Field>
-              </Box>
-            )}
-
-            {isNotAmerica && (
-              <Box>
-                <label htmlFor="custom_state">Customer State</label>
-                <Field
-                  id="custom_state"
-                  name="custom_state"
-                  value={customState}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    setCustomState(e.target.value)
-                  }
-                  placeholder="Enter your State"
+            <StyleFormikStepContent>
+              <StyleBox>
+                <TextField
+                  id="name"
+                  name="name"
+                  label="Name"
+                  placeholder="Enter name"
+                  variant="outlined"
+                  fullWidth
                 />
-              </Box>
-            )}
+              </StyleBox>
+              <StyleBox>
+                <TextField
+                  id="email"
+                  name="email"
+                  label="Email"
+                  placeholder="Enter Email"
+                  variant="outlined"
+                  fullWidth
+                />
+              </StyleBox>
 
-            <Box>
-              <label htmlFor="color">Favorite Color:</label>
-              <Field
-                as="select"
-                name="color"
-                value={color}
-                onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-                  setColor(e.target.value)
-                }
-              >
-                <option value="">Select your favorite color</option>
-                <option value="red">Red</option>
-                <option value="yellow">Yellow</option>
-                <option value="blue">Blue</option>
-              </Field>
-            </Box>
+              <StyleBox>
+                <Country
+                  id="country"
+                  name="country"
+                  labelId="country-label"
+                  value={country}
+                  label="Country"
+                  onChange={(e: SelectChangeEvent) =>
+                    setCountry(e.target.value)
+                  }
+                />
+              </StyleBox>
+
+              {isUSA && (
+                <StyleBox>
+                  <State
+                    id="state"
+                    name="state"
+                    labelId="state-label"
+                    label="US State"
+                  />
+                </StyleBox>
+              )}
+
+              {isCanada && (
+                <StyleBox>
+                  <Province
+                    id="province"
+                    name="province"
+                    label="Province"
+                    labelId="province-label"
+                  />
+                </StyleBox>
+              )}
+
+              {isNotAmerica && (
+                <StyleBox>
+                  <TextField
+                    id="custom_state"
+                    name="custom_state"
+                    label="State"
+                    placeholder="Enter your state"
+                    variant="outlined"
+                    value={customState}
+                    fullWidth
+                    onChange={(e: any) => setCustomState(e.target.value)}
+                  />
+                </StyleBox>
+              )}
+
+              <StyleBox>
+                <Color
+                  id="color"
+                  name="color"
+                  labelId="color-label"
+                  label="Favorite Color"
+                  onChange={(e: SelectChangeEvent) => setColor(e.target.value)}
+                />
+              </StyleBox>
+            </StyleFormikStepContent>
           </FormikStep>
           <FormikStep label="Step 2">
             {hasFood && (
-              <Box>
-                <span>Do you want to order </span>
-                <span>
-                  <button
-                    onClick={(e: any) => {
-                      setFoodVisibility(true);
-                      e.preventDefault();
-                    }}
-                  >
-                    {food}
-                  </button>
-                </span>
-                {isFoodVisible && (
-                  <Box>
-                    <label htmlFor="food">Food Name:</label>
-                    <Field
-                      id="food"
-                      name="food"
-                      placeholder="Enter your food"
-                      value={customFood}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                        setCustomFood(e.target.value)
-                      }
-                    />
-                  </Box>
-                )}
-              </Box>
+              <StyleFormikStepContent>
+                <StyleBox>
+                  <StyleMessage>Do you want to order </StyleMessage>
+                  <StyleMessage>
+                    <MUIButton
+                      variant="text"
+                      onClick={(e: any) => {
+                        setFoodVisibility(true);
+                        e.preventDefault();
+                      }}
+                    >
+                      {food}
+                    </MUIButton>
+                  </StyleMessage>
+                  {isFoodVisible && (
+                    <StyleBox>
+                      <TextField
+                        id="food"
+                        name="food"
+                        label="Food Name"
+                        placeholder="Enter Food"
+                        value={customFood}
+                        onChange={(e: any) => setCustomFood(e.target.value)}
+                      />
+                    </StyleBox>
+                  )}
+                </StyleBox>
+              </StyleFormikStepContent>
             )}
           </FormikStep>
+
           <FormikStep label="Step 3">
             {hasCustomFood && (
-              <>
-                <Box>
-                  <label htmlFor="food">Upload Image:</label>
-                  <input
+              <StyleFormikStepContent>
+                <StyleBox>
+                  <StyleInputFile
                     id="file"
                     name="file"
                     type="file"
                     onChange={handleFileChange}
                   />
-                </Box>
+                </StyleBox>
                 {imagePath && imagePreview && (
-                  <Box>
-                    <ImagePreview
-                      src={imagePreview}
-                      id="preview-image"
-                      alt="Food Preview"
-                    />
-                  </Box>
+                  <StyleBox>
+                    <Thumb file={imagePreview} />
+                  </StyleBox>
                 )}
-              </>
+              </StyleFormikStepContent>
             )}
           </FormikStep>
         </FormikStepper>
@@ -306,7 +322,7 @@ export function FormikStepper({
 
           {currentChild}
 
-          <Grid container spacing={2}>
+          <StyleGrid container spacing={2}>
             {step > 0 ? (
               <Grid item>
                 <Button
@@ -332,7 +348,7 @@ export function FormikStepper({
                 {isSubmitting ? "Submitting" : isLastStep() ? "Submit" : "Next"}
               </Button>
             </Grid>
-          </Grid>
+          </StyleGrid>
         </Form>
       )}
     </Formik>

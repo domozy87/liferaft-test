@@ -1,4 +1,3 @@
-// HTML Country list: https://www.freeformatter.com/iso-country-list-html-select.html
 import React from "react";
 
 import InputLabel from "@mui/material/InputLabel";
@@ -6,16 +5,16 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 
-type CountryT = {
+type ColorT = {
   id: string;
   name: string;
   label: string;
   labelId: string;
-  value: string;
-  onChange: (e: SelectChangeEvent) => void;
+  value?: string;
+  onChange?: (e: SelectChangeEvent) => void;
 };
 
-const Country: React.FC<CountryT> = props => {
+const Color: React.FC<ColorT> = props => {
   const { id, label, labelId, value, onChange, name } = props;
 
   return (
@@ -31,14 +30,14 @@ const Country: React.FC<CountryT> = props => {
         defaultValue=""
       >
         <MenuItem value="">
-          <em>Select Country</em>
+          <em>Select Color</em>
         </MenuItem>
-        <MenuItem value="CA">Canada</MenuItem>
-        <MenuItem value="US">United State of America</MenuItem>
-        <MenuItem value="OT">Other</MenuItem>
+        <MenuItem value="red">Red</MenuItem>
+        <MenuItem value="yellow">Yellow</MenuItem>
+        <MenuItem value="blue">Blue</MenuItem>
       </Select>
     </FormControl>
   );
 };
 
-export default Country;
+export default Color;

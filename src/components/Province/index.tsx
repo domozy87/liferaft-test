@@ -1,25 +1,52 @@
 // HTML Canada province list: https://www.freeformatter.com/canada-province-list-html-select.html
-import React from 'react';
+import React from "react";
 
-const Province: React.FC = () => {
-    return (
-        <>
-            <option value="">Select Province</option>
-            <option value="AB">Alberta</option>
-            <option value="BC">British Columbia</option>
-            <option value="MB">Manitoba</option>
-            <option value="NB">New Brunswick</option>
-            <option value="NL">Newfoundland and Labrador</option>
-            <option value="NS">Nova Scotia</option>
-            <option value="ON">Ontario</option>
-            <option value="PE">Prince Edward Island</option>
-            <option value="QC">Quebec</option>
-            <option value="SK">Saskatchewan</option>
-            <option value="NT">Northwest Territories</option>
-            <option value="NU">Nunavut</option>
-            <option value="YT">Yukon</option>
-        </>
-    );
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
+
+type ProvinceT = {
+  id: string;
+  name: string;
+  label: string;
+  labelId: string;
+  value?: string;
+  onChange?: (e: SelectChangeEvent) => void;
+};
+
+const Province: React.FC<ProvinceT> = props => {
+  const { id, name, label, labelId } = props;
+
+  return (
+    <FormControl fullWidth>
+      <InputLabel id={labelId}>{label}</InputLabel>
+      <Select
+        labelId={labelId}
+        id={id}
+        label={label}
+        name={name}
+        defaultValue=""
+      >
+        <MenuItem value="">
+          <em>Select Province</em>
+        </MenuItem>
+        <MenuItem value="AB">Alberta</MenuItem>
+        <MenuItem value="BC">British Columbia</MenuItem>
+        <MenuItem value="MB">Manitoba</MenuItem>
+        <MenuItem value="NB">New Brunswick</MenuItem>
+        <MenuItem value="NL">Newfoundland and Labrador</MenuItem>
+        <MenuItem value="NS">Nova Scotia</MenuItem>
+        <MenuItem value="ON">Ontario</MenuItem>
+        <MenuItem value="PE">Prince Edward Island</MenuItem>
+        <MenuItem value="QC">Quebec</MenuItem>
+        <MenuItem value="SK">Saskatchewan</MenuItem>
+        <MenuItem value="NT">Northwest Territories</MenuItem>
+        <MenuItem value="NU">Nunavut</MenuItem>
+        <MenuItem value="YT">Yukon</MenuItem>
+      </Select>
+    </FormControl>
+  );
 };
 
 export default Province;
