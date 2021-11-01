@@ -3,11 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@emotion/react": "^11.5.0",
-    "@emotion/styled": "^11.3.0",
     "@material-ui/core": "^4.12.3",
     "@material-ui/lab": "^4.0.0-alpha.60",
-    "@mui/material": "^5.0.6",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
@@ -17,7 +14,6 @@
     "@types/react-dom": "^17.0.0",
     "dotenv": "^10.0.0",
     "formik": "^2.2.9",
-    "formik-material-ui": "^4.0.0-alpha.2",
     "history": "^5.0.1",
     "next": "^12.0.1",
     "react": "^17.0.2",
@@ -55,5 +51,9 @@
   },
   "devDependencies": {
     "@types/styled-components": "^5.1.15"
+  },
+  "prettier": {
+    "singleQuote": true,
+    "semi": true
   }
 }

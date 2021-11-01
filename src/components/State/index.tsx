@@ -18,7 +18,7 @@ type StateT = {
 };
 
 const State: React.FC<StateT> = props => {
-  const { id, labelId, label, name } = props;
+  const { id, labelId, label, name, value, onChange } = props;
   return (
     <FormControl fullWidth>
       <InputLabel id={labelId}>{label}</InputLabel>
@@ -28,6 +28,8 @@ const State: React.FC<StateT> = props => {
         label={label}
         name={name}
         defaultValue=""
+        value={value}
+        onChange={onChange}
       >
         <MenuItem value="">
           <em>Select State</em>

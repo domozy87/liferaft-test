@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
+import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
 
 import {
   Box,
@@ -11,23 +11,23 @@ import {
   Step,
   StepLabel,
   Stepper
-} from "@material-ui/core";
-import { Formik, Form, FormikConfig, FormikValues } from "formik";
-import * as Yup from "yup";
+} from '@material-ui/core';
+import { Formik, Form, FormikConfig, FormikValues } from 'formik';
+// import * as Yup from "yup";
 
 // Material UI Controls
-import TextField from "@mui/material/TextField";
-import { SelectChangeEvent, Button as MUIButton } from "@mui/material";
+import TextField from '@mui/material/TextField';
+import { SelectChangeEvent, Button as MUIButton } from '@mui/material';
 
 // Components
-import Country from "./Country";
-import State from "./State";
-import Province from "./Province";
-import Color from "./Color";
-import Thumb from "./Thumb";
+import Country from './Country';
+import State from './State';
+import Province from './Province';
+import Color from './Color';
+import Thumb from './Thumb';
 
 // Types or Enum
-import { ColorFoodVariant } from "../types/colorFood";
+import { ColorFoodVariant } from '../types/colorFood';
 
 const StyleFormikStepContent = styled.div`
   display: flex;
@@ -57,38 +57,43 @@ const StyleMessage = styled.span`
 `;
 
 const StyleInputFile = styled.input`
-    height: 20px;
-    min-width: 300px;
+  height: 20px;
+  min-width: 300px;
 `;
 
-const StepOneSchema = Yup.object().shape({
-  name: Yup.string()
-    .min(2, "Too Short!")
-    .max(50, "Too Long!")
-    .required("Name is required"),
-  email: Yup.string()
-    .email("Invalid email")
-    .required("Email is required"),
-  country: Yup.string().required("Country is required"),
-  color: Yup.string().required("Color is required")
-});
+// ToDo - apply validation
+// const StepOneSchema = Yup.object().shape({
+//   name: Yup.string()
+//     .min(2, "Too Short!")
+//     .max(50, "Too Long!")
+//     .required("Name is required"),
+//   email: Yup.string()
+//     .email("Invalid email")
+//     .required("Email is required"),
+//   country: Yup.string().required("Country is required"),
+//   color: Yup.string().required("Color is required")
+// });
 
 const Home: React.FC = () => {
   // States
-  const [country, setCountry] = useState<string>("");
-  const [customState, setCustomState] = useState<string>("");
-  const [color, setColor] = useState<string>("");
+  const [name, setName] = useState<string>('');
+  const [email, setEmail] = useState<string>('');
+  const [country, setCountry] = useState<string>('');
+  const [state, setState] = useState<string>('');
+  const [province, setProvince] = useState<string>('');
+  const [customState, setCustomState] = useState<string>('');
+  const [color, setColor] = useState<string>('');
   const [food, setFood] = useState<ColorFoodVariant>(ColorFoodVariant.none);
-  const [customFood, setCustomFood] = useState<string>("");
+  const [customFood, setCustomFood] = useState<string>('');
   const [isFoodVisible, setFoodVisibility] = useState<boolean>(false);
-  const [imagePath, setImagePath] = useState<string>("");
-  const [imagePreview, setImagePreview] = useState<string>("");
+  const [imagePath, setImagePath] = useState<string>('');
+  const [imagePreview, setImagePreview] = useState<string>('');
 
-  const isUSA = country === "US" ? true : false;
-  const isCanada = country === "CA" ? true : false;
-  const isNotAmerica = !isUSA && !isCanada && country !== "" ? true : false;
+  const isUSA = country === 'US' ? true : false;
+  const isCanada = country === 'CA' ? true : false;
+  const isNotAmerica = !isUSA && !isCanada && country !== '' ? true : false;
   const hasFood = food !== ColorFoodVariant.none ? true : false;
-  const hasCustomFood = hasFood && customFood !== "" ? true : false;
+  const hasCustomFood = hasFood && customFood !== '' ? true : false;
 
   const handleFileChange = (e: any) => {
     setImagePath(e.target.files[0]);
@@ -96,11 +101,11 @@ const Home: React.FC = () => {
   };
 
   useEffect(() => {
-    if (color === "red") {
+    if (color === 'red') {
       setFood(ColorFoodVariant.red);
-    } else if (color === "yellow") {
+    } else if (color === 'yellow') {
       setFood(ColorFoodVariant.yellow);
-    } else if (color === "blue") {
+    } else if (color === 'blue') {
       setFood(ColorFoodVariant.blue);
     } else {
       setFood(ColorFoodVariant.none);
@@ -108,45 +113,65 @@ const Home: React.FC = () => {
     }
   }, [color, setFood]);
 
+  const sleep = (time: number) => new Promise(acc => setTimeout(acc, time));
+
   return (
     <Card>
       <CardContent>
         <FormikStepper
           initialValues={{
-            name: "",
-            email: "",
-            country: "",
-            state: "",
-            province: "",
-            custom_state: "",
-            color: "",
-            food: "",
+            name: '',
+            email: '',
+            country: '',
+            state: '',
+            province: '',
+            custom_state: '',
+            color: '',
+            food: '',
             file: null
           }}
           onSubmit={async values => {
-            console.log("values", values);
+            await sleep(3000);
+            // I'm using states instead of values because I have some issues with Material UI and Multi Steps Formik
+            const data = {
+              name,
+              email,
+              country,
+              state,
+              province,
+              color,
+              customFood,
+              imagePath
+            };
+            console.log(data);
           }}
         >
           <FormikStep label="Step 1">
             <StyleFormikStepContent>
               <StyleBox>
                 <TextField
-                  id="name"
                   name="name"
                   label="Name"
                   placeholder="Enter name"
                   variant="outlined"
                   fullWidth
+                  value={name}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    setName(e.target.value)
+                  }
                 />
               </StyleBox>
               <StyleBox>
                 <TextField
-                  id="email"
                   name="email"
                   label="Email"
                   placeholder="Enter Email"
                   variant="outlined"
                   fullWidth
+                  value={email}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    setEmail(e.target.value)
+                  }
                 />
               </StyleBox>
 
@@ -170,6 +195,10 @@ const Home: React.FC = () => {
                     name="state"
                     labelId="state-label"
                     label="US State"
+                    value={state}
+                    onChange={(e: SelectChangeEvent) =>
+                      setState(e.target.value)
+                    }
                   />
                 </StyleBox>
               )}
@@ -181,6 +210,10 @@ const Home: React.FC = () => {
                     name="province"
                     label="Province"
                     labelId="province-label"
+                    value={province}
+                    onChange={(e: SelectChangeEvent) =>
+                      setProvince(e.target.value)
+                    }
                   />
                 </StyleBox>
               )}
@@ -188,7 +221,6 @@ const Home: React.FC = () => {
               {isNotAmerica && (
                 <StyleBox>
                   <TextField
-                    id="custom_state"
                     name="custom_state"
                     label="State"
                     placeholder="Enter your state"
@@ -230,7 +262,6 @@ const Home: React.FC = () => {
                   {isFoodVisible && (
                     <StyleBox>
                       <TextField
-                        id="food"
                         name="food"
                         label="Food Name"
                         placeholder="Enter Food"
@@ -270,7 +301,7 @@ const Home: React.FC = () => {
 };
 
 export interface FormikStepProps
-  extends Pick<FormikConfig<FormikValues>, "children" | "validationSchema"> {
+  extends Pick<FormikConfig<FormikValues>, 'children' | 'validationSchema'> {
   label: string;
 }
 
@@ -345,7 +376,7 @@ export function FormikStepper({
                 color="primary"
                 type="submit"
               >
-                {isSubmitting ? "Submitting" : isLastStep() ? "Submit" : "Next"}
+                {isSubmitting ? 'Submitting' : isLastStep() ? 'Submit' : 'Next'}
               </Button>
             </Grid>
           </StyleGrid>

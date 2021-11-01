@@ -16,7 +16,7 @@ type ProvinceT = {
 };
 
 const Province: React.FC<ProvinceT> = props => {
-  const { id, name, label, labelId } = props;
+  const { id, name, label, labelId, value, onChange } = props;
 
   return (
     <FormControl fullWidth>
@@ -27,6 +27,8 @@ const Province: React.FC<ProvinceT> = props => {
         label={label}
         name={name}
         defaultValue=""
+        value={value}
+        onChange={onChange}
       >
         <MenuItem value="">
           <em>Select Province</em>

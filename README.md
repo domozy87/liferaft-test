@@ -9,7 +9,7 @@ In the project directory, you can run:
 ### `yarn start`
 
 Runs the app in the development mode.\
-Open [http://localhost:3001](http://localhost:3001) to view it in the browser.
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 The page will reload if you make edits.\
 You will also see any lint errors in the console.
@@ -41,16 +41,26 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 
 ## Run Docker
 
-### Start/Build Docker Container
+### Start amd Build Docker Container
 ```
 $ docker-compose up -d --build
 Or
 $ sudo docker-compose up -d --build
 ```
 
+### Start Docker Container
+```
+$ docker-compose up -d
+```
+
 ### Stop Docker Container
 ```
 $ docker-compose stop
+```
+
+### Access Browser URL
+```
+Open [http://localhost:3001](http://localhost:3001) to view it in the browser.
 ```
 
 ## Learn More
