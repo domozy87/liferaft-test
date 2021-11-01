@@ -18,6 +18,9 @@ import { Formik, Form, FormikConfig, FormikValues } from 'formik';
 // Material UI Controls
 import { TextField, SelectChangeEvent, Button as MUIButton } from '@mui/material';
 
+// Axios
+import axios from 'axios';
+
 // Components
 import Country from './Country';
 import State from './State';
@@ -130,7 +133,7 @@ const Home: React.FC = () => {
             file: null
           }}
           onSubmit={async values => {
-            await sleep(3000);
+            await sleep(2000);
             // I'm using states instead of values because I have some issues with Material UI and Multi Steps Formik
             const data = {
               name,
@@ -143,6 +146,16 @@ const Home: React.FC = () => {
               imagePath
             };
             console.log(data);
+
+            // Submit
+            const res = await axios.post('https://enzmlk42rnco.x.pipedream.net/', data);
+
+            if (res.data.success === true) {
+                alert('Your order has been successfully submitted!');
+            }
+            else {
+                alert('Your order has been failed!');
+            }
           }}
         >
           <FormikStep label="Step 1">
