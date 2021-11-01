@@ -1,32 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
-import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  CircularProgress,
-  Grid,
-  Step,
-  StepLabel,
-  Stepper
-} from '@material-ui/core';
-import { Formik, Form, FormikConfig, FormikValues } from 'formik';
+import { Box, Card, CardContent } from '@material-ui/core';
 // import * as Yup from "yup";
 
 // Material UI Controls
-import { TextField, SelectChangeEvent, Button as MUIButton } from '@mui/material';
+import {
+  TextField,
+  SelectChangeEvent,
+  Button as MUIButton
+} from '@mui/material';
 
 // Axios
 import axios from 'axios';
 
 // Components
+import FormikStepper from './FormStepper/FormikStepper';
+import FormikStep from './FormStepper/FormikStep';
 import Country from './Country';
 import State from './State';
 import Province from './Province';
 import Color from './Color';
 import Thumb from './Thumb';
+
+// Constants
+import { FAKE_ENDPOINT } from '../constants/Endpoint';
 
 // Types or Enum
 import { ColorFoodVariant } from '../types/colorFood';
@@ -44,13 +42,6 @@ const StyleFormikStepContent = styled.div`
 const StyleBox = styled(Box)`
   padding: 12px;
   min-width: 300px;
-`;
-
-const StyleGrid = styled(Grid)`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 20px 20px;
 `;
 
 const StyleMessage = styled.span`
@@ -132,8 +123,8 @@ const Home: React.FC = () => {
             food: '',
             file: null
           }}
-          onSubmit={async values => {
-            await sleep(2000);
+          onSubmit={async () => {
+            await sleep(500);
             // I'm using states instead of values because I have some issues with Material UI and Multi Steps Formik
             const data = {
               name,
@@ -148,13 +139,12 @@ const Home: React.FC = () => {
             console.log(data);
 
             // Submit
-            const res = await axios.post('https://enzmlk42rnco.x.pipedream.net/', data);
+            const res = await axios.post(FAKE_ENDPOINT, data);
 
             if (res.data.success === true) {
-                alert('Your order has been successfully submitted!');
-            }
-            else {
-                alert('Your order has been failed!');
+              alert('Your order has been successfully submitted!');
+            } else {
+              alert('Your order has been failed!');
             }
           }}
         >
@@ -311,91 +301,5 @@ const Home: React.FC = () => {
     </Card>
   );
 };
-
-export interface FormikStepProps
-  extends Pick<FormikConfig<FormikValues>, 'children' | 'validationSchema'> {
-  label: string;
-}
-
-export function FormikStep({ children }: FormikStepProps) {
-  return <>{children}</>;
-}
-
-export function FormikStepper({
-  children,
-  ...props
-}: FormikConfig<FormikValues>) {
-  const childrenArray = React.Children.toArray(children) as React.ReactElement<
-    FormikStepProps
-  >[];
-  const [step, setStep] = useState<number>(0);
-  const currentChild = childrenArray[step];
-  const [completed, setCompleted] = useState<boolean>(false);
-
-  function isLastStep() {
-    return step === childrenArray.length - 1;
-  }
-
-  return (
-    <Formik
-      {...props}
-      validationSchema={currentChild.props.validationSchema}
-      onSubmit={async (values, helpers) => {
-        if (isLastStep()) {
-          await props.onSubmit(values, helpers);
-          setCompleted(true);
-        } else {
-          setStep(s => s + 1);
-          helpers.setTouched({});
-        }
-      }}
-    >
-      {({ isSubmitting }) => (
-        <Form autoComplete="off">
-          <Stepper alternativeLabel activeStep={step}>
-            {childrenArray.map((child, index) => (
-              <Step
-                key={child.props.label}
-                completed={step > index || completed}
-              >
-                <StepLabel>{child.props.label}</StepLabel>
-              </Step>
-            ))}
-          </Stepper>
-
-          {currentChild}
-
-          <StyleGrid container spacing={2}>
-            {step > 0 ? (
-              <Grid item>
-                <Button
-                  disabled={isSubmitting}
-                  variant="contained"
-                  color="primary"
-                  onClick={() => setStep(s => s - 1)}
-                >
-                  Back
-                </Button>
-              </Grid>
-            ) : null}
-            <Grid item>
-              <Button
-                startIcon={
-                  isSubmitting ? <CircularProgress size="1rem" /> : null
-                }
-                disabled={isSubmitting}
-                variant="contained"
-                color="primary"
-                type="submit"
-              >
-                {isSubmitting ? 'Submitting' : isLastStep() ? 'Submit' : 'Next'}
-              </Button>
-            </Grid>
-          </StyleGrid>
-        </Form>
-      )}
-    </Formik>
-  );
-}
 
 export default Home;
