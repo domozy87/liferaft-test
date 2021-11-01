@@ -22,12 +22,14 @@ import State from './State';
 import Province from './Province';
 import Color from './Color';
 import Thumb from './Thumb';
+import Alert from './Alert';
 
 // Constants
 import { FAKE_ENDPOINT } from '../constants/Endpoint';
 
 // Types or Enum
 import { ColorFoodVariant } from '../types/colorFood';
+import { AlertType } from '../types/Alert';
 
 const StyleFormikStepContent = styled.div`
   display: flex;
@@ -81,6 +83,10 @@ const Home: React.FC = () => {
   const [isFoodVisible, setFoodVisibility] = useState<boolean>(false);
   const [imagePath, setImagePath] = useState<string>('');
   const [imagePreview, setImagePreview] = useState<string>('');
+  // Message State
+  const [alertVisibility, setAlertVisibility] = useState<boolean>(false);
+  const [alertType, setAlertType] = useState<AlertType>(AlertType.ERROR);
+  const [alertMessage, setAlertMessage] = useState<string>('');
 
   const isUSA = country === 'US' ? true : false;
   const isCanada = country === 'CA' ? true : false;
@@ -111,6 +117,7 @@ const Home: React.FC = () => {
   return (
     <Card>
       <CardContent>
+        {alertVisibility && <Alert type={alertType} message={alertMessage} />}
         <FormikStepper
           initialValues={{
             name: '',
@@ -136,15 +143,25 @@ const Home: React.FC = () => {
               customFood,
               imagePath
             };
-            console.log(data);
+            
+            const dataString = data;
+            dataString.imagePath = imagePreview;
 
             // Submit
             const res = await axios.post(FAKE_ENDPOINT, data);
 
             if (res.data.success === true) {
-              alert('Your order has been successfully submitted!');
+              const message = `Your order has been successfully submitted! \n${JSON.stringify(data)}`;
+
+              setAlertType(AlertType.SUCCESS);
+              setAlertMessage(message);
+              setAlertVisibility(true);
             } else {
-              alert('Your order has been failed!');
+              const message = 'Your order has been failed!';
+
+              setAlertType(AlertType.SUCCESS);
+              setAlertMessage(message);
+              setAlertVisibility(true);
             }
           }}
         >

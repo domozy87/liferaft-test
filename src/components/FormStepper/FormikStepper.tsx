@@ -44,6 +44,7 @@ const FormikStepper: React.FC<FormikConfig<FormikValues>> = ({
           setCompleted(true);
         } else {
           setStep(s => s + 1);
+          // TODO - Validate fields each step
           helpers.setTouched({});
         }
       }}
